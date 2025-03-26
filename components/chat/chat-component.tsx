@@ -1,0 +1,60 @@
+"use client"
+
+import React from 'react'
+import { useChat } from "ai/react"
+import { Input } from '../ui/input'
+import { SendIcon } from 'lucide-react'
+import { Button } from '../ui/button'
+import ChatMessages from './chat-messages'
+
+type Props = {
+  chatId: number;
+}
+
+function ChatComponent({ chatId }: Props) {
+
+  const { input, handleInputChange, handleSubmit, messages } = useChat({
+    body: {
+      chatId
+    }
+  })
+
+  React.useEffect(() => {
+    const messagesContainer = document.getElementById("messages-container")
+    if (messagesContainer) {
+      messagesContainer.scrollTop = messagesContainer.scrollHeight
+    }
+  }, [messages])
+
+  return (
+    <div className='relative max-h-screen overflow-auto' id={"messages-container"}>
+      <div className='sticky top-0 left-0 w-full h-fit'>
+        <h3 className='text-xl font-bold'>Chat</h3>
+      </div>
+
+      {/* messages */}
+      <ChatMessages messages={messages} />
+
+      <form
+        onSubmit={handleSubmit}
+        className='sticky bottom-0 inset-x-0 px-2 py-2 space-y-2'
+      >
+        <Input
+          placeholder='Ask your question'
+          className='w-full'
+          value={input}
+          onChange={handleInputChange}
+        />
+
+        <Button>
+          <SendIcon className='h-4 w-4 mr-2' />
+          Send
+        </Button>
+
+      </form>
+
+    </div>
+  )
+}
+
+export default ChatComponent

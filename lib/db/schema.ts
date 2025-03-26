@@ -20,3 +20,5 @@ export const messages = pgTable("messages", {
   role: userSystemEnum("role").notNull(),
 })
 
+
+export type ChatSchema = typeof chats.$inferSelect;
