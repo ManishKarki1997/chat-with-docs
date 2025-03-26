@@ -7,7 +7,6 @@ export async function uploadToS3(file: File) {
         accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID!,
         secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY!
       }),
-
     })
 
     const s3 = new AWS.S3({
@@ -24,13 +23,10 @@ export async function uploadToS3(file: File) {
       Key: fileKey,
       Body: file,
     }
-    console.log("params", params, {
-      accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID!,
-      secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY!
-    })
+
     const upload = s3.putObject(params)
       .on("httpUploadProgress", progress => {
-        console.log("Upload progress ", progress)
+        // console.log("Upload progress ", progress)
       }).promise()
 
     await upload
