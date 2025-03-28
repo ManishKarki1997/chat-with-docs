@@ -37,7 +37,8 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-dropzone": "^14.3.8",
-    "sonner": "^2.0.1"
+    "sonner": "^2.0.1",
+    "stripe": "^17.7.0"
   },
   "devDependencies": {
     "@types/md5": "^2.3.5",

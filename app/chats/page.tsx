@@ -1,11 +1,13 @@
 import ChatComponent from '@/components/chat/chat-component';
 import ChatSidebar from '@/components/chat/chat-sidebar';
 import PDFViewer from '@/components/chat/pdf-viewer';
+import FileUpload from '@/components/file-upload';
 import { db } from '@/lib/db/db';
 import { chats } from '@/lib/db/schema';
 import { checkSubscription } from '@/lib/subscription';
 import { createClient } from '@/utils/supabase/server';
 import { and, eq } from 'drizzle-orm';
+import { RocketIcon } from 'lucide-react';
 import { redirect } from 'next/navigation';
 import React from 'react'
 
@@ -27,18 +29,15 @@ async function ChatPage({ params }: Props) {
 
   const isPro = await checkSubscription()
 
-
   const _chats = await db
     .select()
     .from(chats)
     .where(
       and(
         eq(chats.userId, user.id),
-        // eq(chats.id, parseInt(chatId)),
       )
     )
 
-  const activeChat = _chats.find(chat => chat.id === parseInt(chatId))
 
 
 
@@ -54,18 +53,14 @@ async function ChatPage({ params }: Props) {
           <ChatSidebar chats={_chats} chatId={parseInt(chatId)} isPro={isPro} />
         </div>
 
-        <div className="max-h-screen p-4 overscroll-auto flex-[5]">
-          <PDFViewer pdfUrl={activeChat?.url || ""} />
+        <div className="max-h-screen p-4 overscroll-auto flex-[5] flex items-center justify-center">
+          <div className='w-full flex-1 max-w-lg mx-auto text-center flex flex-col items-center'>
+            <RocketIcon className='h-10 w-10 mb-2' />
+            <h3 className='font-medium text-lg mb-4'>Ready to chat with your documents?</h3>
+            <FileUpload />
+          </div>
         </div>
-
-        <div className="max-h-screen p-4 overscroll-auto border-l-4 border-primary flex-[3]">
-          <ChatComponent chatId={parseInt(chatId)} />
-        </div>
-
       </div>
-      {/* <pre>
-        {JSON.stringify(_chats, null, 2)}
-      </pre> */}
     </div>
   )
 }

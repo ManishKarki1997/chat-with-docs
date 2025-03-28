@@ -2,23 +2,30 @@
 
 import { ChatSchema } from '@/lib/db/schema';
 import { cn } from '@/lib/utils';
-import { MessageCircleIcon, PlusIcon } from 'lucide-react';
+import { DiamondIcon, DiamondPlus, MessageCircleIcon, PlusIcon } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '../ui/button';
+import React from 'react';
+import axios from 'axios';
+import Logo from '../logo';
+import SubscriptionButton from '../subscription-button';
 
 type Props = {
   chats: ChatSchema[];
   chatId: number;
+  isPro: boolean;
 }
 
-function ChatSidebar({ chats, chatId }: Props) {
+async function ChatSidebar({ chats, chatId, isPro }: Props) {
+
+  const [isLoading, setIsLoading] = React.useState(false)
+
+
+
   return (
     <div className='w-full h-screen p-4'>
-      <Link href={'/'}>
-        <Button>
-          <PlusIcon className='mr-2' />
-          New Chat
-        </Button>
+      <Link href="/">
+        <Logo />
       </Link>
 
       <div className="flex flex-col gap-2 mt-8">
@@ -38,10 +45,9 @@ function ChatSidebar({ chats, chatId }: Props) {
       </div>
 
       <div className='absolute bottom-4 left-4'>
-        <div className='flex items-center gap-4 text-sm flex-wrap'>
-          <Link href="/">Home</Link>
-          <Link href="/about-me">About Me</Link>
-        </div>
+
+
+        <SubscriptionButton isPro={isPro} />
       </div>
 
     </div>
