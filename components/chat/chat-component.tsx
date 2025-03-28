@@ -6,6 +6,8 @@ import { Input } from '../ui/input'
 import { SendIcon } from 'lucide-react'
 import { Button } from '../ui/button'
 import ChatMessages from './chat-messages'
+import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
 
 type Props = {
   chatId: number;
@@ -13,10 +15,23 @@ type Props = {
 
 function ChatComponent({ chatId }: Props) {
 
+  const { data, isLoading } = useQuery({
+    queryKey: ['chat-messages', chatId],
+    queryFn: async () => {
+      const response = await axios.post(`/api/get-chat-messages`, {
+        chatId
+      })
+
+      return response.data
+    }
+  })
+
+
   const { input, handleInputChange, handleSubmit, messages } = useChat({
     body: {
-      chatId
-    }
+      chatId,
+    },
+    initialMessages: data || []
   })
 
   React.useEffect(() => {
@@ -33,11 +48,11 @@ function ChatComponent({ chatId }: Props) {
       </div>
 
       {/* messages */}
-      <ChatMessages messages={messages} />
+      <ChatMessages messages={messages} isLoading={isLoading} />
 
       <form
         onSubmit={handleSubmit}
-        className='sticky bottom-0 inset-x-0 px-2 py-2 space-y-2'
+        className='sticky bottom-0 inset-x-0 px-2 py-2 space-y-2 mt-4'
       >
         <Input
           placeholder='Ask your question'

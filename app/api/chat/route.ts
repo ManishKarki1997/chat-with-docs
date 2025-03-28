@@ -4,7 +4,7 @@ import { getContext } from '@/lib/context';
 import { createClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db/db';
-import { chats } from '@/lib/db/schema';
+import { chats, messages as messagesSchema } from '@/lib/db/schema';
 import { and, eq } from 'drizzle-orm';
 
 // export const runtime = "edge";
@@ -78,12 +78,30 @@ export async function POST(req: Request) {
     }
 
 
+    await db.insert(messagesSchema).values({
+      chatId: parseInt(chatId),
+      userId: user.id,
+      content: lastMessage.content,
+      role: "user",
+    })
+
     const result = streamText({
       model: openai("gpt-3.5-turbo"),
       messages: [
         prompt,
         ...messages.filter((message: UIMessage) => message.role === "user")
       ],
+      onFinish: async (completion) => {
+
+        if (completion?.text) {
+          await db.insert(messagesSchema).values({
+            chatId: parseInt(chatId),
+            userId: user.id,
+            content: completion?.text,
+            role: "system",
+          })
+        }
+      }
     })
 
     // const response = await openai.createChatCompletion({
@@ -97,5 +115,10 @@ export async function POST(req: Request) {
     return result.toDataStreamResponse()
   } catch (error) {
     console.log("Error generating chat completion", error)
+    return NextResponse.json({
+      error: "Error generating chat completion"
+    }, {
+      status: 500
+    })
   }
 }

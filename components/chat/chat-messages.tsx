@@ -1,12 +1,26 @@
 import { cn } from '@/lib/utils';
 import { UIMessage } from 'ai'
 import React from 'react'
+import { Skeleton } from '../ui/skeleton';
 
 type Props = {
+  isLoading: boolean;
   messages: UIMessage[];
 }
 
-function ChatMessages({ messages }: Props) {
+function ChatMessages({ messages, isLoading }: Props) {
+
+
+  if (isLoading) {
+
+    return <div className='space-y-4 mt-4'>
+      {
+        Array.from(Array(8).keys()).map(sk => (
+          <Skeleton key={sk} className='w-full h-16' />
+        ))
+      }
+    </div>
+  }
 
   if (!messages) {
     return null
