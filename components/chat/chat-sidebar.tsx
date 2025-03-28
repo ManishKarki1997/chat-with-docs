@@ -1,4 +1,3 @@
-"use client"
 
 import { ChatSchema } from '@/lib/db/schema';
 import { cn } from '@/lib/utils';
@@ -18,15 +17,20 @@ type Props = {
 
 async function ChatSidebar({ chats, chatId, isPro }: Props) {
 
-  const [isLoading, setIsLoading] = React.useState(false)
-
-
-
   return (
     <div className='w-full h-screen p-4'>
       <Link href="/">
         <Logo />
       </Link>
+
+      <div className='mt-8'>
+        <Link href="/chats" className=''>
+          <Button className='flex-1 w-full'>
+            <PlusIcon className='mr-2 h-4 w-4' />
+            New Chat
+          </Button>
+        </Link>
+      </div>
 
       <div className="flex flex-col gap-2 mt-8">
         {

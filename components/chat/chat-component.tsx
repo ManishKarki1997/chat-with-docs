@@ -43,7 +43,7 @@ function ChatComponent({ chatId }: Props) {
 
   return (
     <div className='relative max-h-screen overflow-auto' id={"messages-container"}>
-      <div className='sticky top-0 left-0 w-full h-fit'>
+      <div className='sticky top-0 left-0 w-full h-fit mb-4'>
         <h3 className='text-xl font-bold'>Chat</h3>
       </div>
 

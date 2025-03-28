@@ -58,7 +58,7 @@ async function ChatPage({ params }: Props) {
           <PDFViewer pdfUrl={activeChat?.url || ""} />
         </div>
 
-        <div className="max-h-screen p-4 overscroll-auto border-l-4 border-primary flex-[3]">
+        <div className="max-h-screen p-4 overscroll-auto border-l-1 border-primary flex-[3]">
           <ChatComponent chatId={parseInt(chatId)} />
         </div>
 
